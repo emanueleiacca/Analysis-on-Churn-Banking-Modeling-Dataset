@@ -1,2 +1,1 @@
-print("ho perso tutto")
-print('h')
+import numpy as np
