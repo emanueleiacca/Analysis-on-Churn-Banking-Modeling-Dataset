@@ -1,1 +1,6 @@
-check
+goal: individuare i migliori 10k clienti della banca (sono quelli che sicuro non abbandonano) prob(y_flag='si')>(SELECT max)
+test su un altro dataset simile. Quindi alla fine conta accuracy.
+EDA da fare
++ modelli con tuning, poi facciamo ensembling
+mostrare tutte le metriche
+migliore metrica?
