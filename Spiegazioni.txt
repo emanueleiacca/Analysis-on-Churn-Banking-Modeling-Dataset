@@ -1,0 +1,11 @@
+Per generare il dataset sintetico abbiamo usato ACTGAN, che è un modello ottimizzato del CTGAN, basato sul GAN (Generative Adversarial Network) che crea Dataset sintetici attraverso Neural Network. Il funzionamento è molto semplice, abbiamo due reti neurali che si sfidano a vicenda al fine di migliorarsi:
+
+la prima, il discriminante, ha il compito di creare nuovi dati dati al fine di ingannare il discriminatore, ovvero il secondo NN che invece è un discriminatore che ha il compito di distinguere dati creati dal generatore e reali. 
+
+Attraverso Gretel AI: https://github.com/gretelai/gretel-synthetics?tab=readme-ov-file
+Abbiamo trainato il nostro modello per creare il dataset sintetico. Gretel ci fornisce un set up ottimizato del GAN che in particolare non necessitano di trattare i nostri dati, il GAN originale necessava imputarli. 
+Gretel AI ci fornisce un interfaccia user friendly per creare il nostro dataset sintetico e che usa google colab per elaborare la nostra richiesta. Il modello di per se è molto pesante, nella documentazione infatti sono consigliati 32gb di RAM e GPU dedicata di nuova gen. Ho provato a trainare il modello sia in locale che in colab ma il processo era troppo lento. Fortunatamente l'interfaccia di cui parlavo prima fornisce il collegamento con google colab dove utilizzano le GPU fornite a pagamento tramite Colab, il training è durato poco piu' di due ore.
+In seguito al training è fornito un report che dimostra come il dataset sintetico creato rispecchi l'andamento del dataset originale, pur avendo dati diversi.
+Una volta trainato, è possibile scegliere il numero di righe richiesto per il dataset sintetico e generarlo usando il modello trainato in precedenza
+
+
