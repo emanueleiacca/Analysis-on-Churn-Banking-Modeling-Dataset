@@ -1,11 +1,67 @@
-Per generare il dataset sintetico abbiamo usato ACTGAN, che è un modello ottimizzato del CTGAN, basato sul GAN (Generative Adversarial Network) che crea Dataset sintetici attraverso Neural Network. Il funzionamento è molto semplice, abbiamo due reti neurali che si sfidano a vicenda al fine di migliorarsi:
+Inizialmente ci siamo posti la domanda di quale metodo per trattare le classi sbilanciate sia il migliore,
+lo abbiamo dimostrato empiricamente, provando RandomUnderSampling, RandomOverSampling e Cost-Learning function.
+L'ultima si è dimostrata la migliore e la piu' semplice da implementare in Optuna, il problema è cosi come tutte
+le tecniche di bilanciamento suppone che il rateo tra classe minoritaria e totale sia lo stesso
 
-la prima, il discriminante, ha il compito di creare nuovi dati dati al fine di ingannare il discriminatore, ovvero il secondo NN che invece è un discriminatore che ha il compito di distinguere dati creati dal generatore e reali. 
+Utilizzando lo stesso metodo, abbiamo cercato anche la miglior metrica. In particolare abbiamo analizzato:
+ROC AUC: empiricamente funziona bene ma vedendo il suo modo di ragionare attraverso i white box method di 
+Maria teresa abbiamo deciso di scartarlo
+Precision: consigliata dal prof, minimizza i FP cosa che a noi non interessa, risultati anche qui buoni 
+Recall : massimizza i TP non pensando ai FN, il che teoricamente fa al caso nostro ma i risultati empirici sono
+peggiori degli altri due
+FScore: bilanciando recall e precision (abbiamo provato B1 e B2 quindi con maggior peso su recall) i risultati
+sono anche qui nella media
+Rank method: nessuna metrica, abbiamo semplicemente ordinato in base alle probabilità e selezionato il 1:6 dei migliori.
+Quanti ne prendiamo ('si' predetti su 'si' totali) è il nostro score. Rappresenta la metrica finale richiesta nel task.
+Inoltre usa pred_proba che fa piu al caso nostro rispetto agli altri metodi che usano predict (tranne ROC-AUC)
+
+Optuna, è un framework per automatizzare la ricerca degli iperparametri. ù
+Supera GridSearchCv perché è più veloce, poiché utilizza più thread contemporaneamente, 
+è più efficiente, poiché possiamo provare ogni possibile configurazione di iperparametri in modo 
+efficiente utilizzando TPE Sampler, un algoritmo di ottimizzazione degli iperparametri bayesiani che apprende la relazione tra gli iperparametri
+ e darci i migliori risultati in un tempo più breve. 
+ Infatti abbiamo bisogno solo di 50 prove per avere i migliori risultati possibili
+
+ Volevamo massimizzare i nostri risultati, quindi abbiamo applicato anche gli algoritmi Bootstrap.
+Bootstrap combina più algoritmi deboli come un albero decisionale per formarne uno più forte
+
+Il primo utilizzo è LightGBM, progettato da Google per grandi Dataset con molte variabili.
+E' un Leaf-wise tree growth, ciò significa che l'albero cresce verticalmente una foglia alla volta,
+ per selezionare quella foglia riduciamo la funzione loss al minimo e la espandiamo finché il nostro 
+ albero non cattura qualsiasi modello e relazione nei dati, portando a una modello potente
+
+ XGBoost è stato invece progettato da un ricercatore cinese, funziona in modo simile ma 
+ l'uso di Lasso o Ridge come penalità per prevenire l'overfitting e Tree Pruning per fermare 
+ la crescita dell'albero quando si aggiungono nuove foglie che non contribuiscono in modo significativo a 
+ ridurre la funzione loss(quindi quando è sotto una certa soglia)
+  questo porta ad un albero più efficiente e meno complesso
+
+  Ensembling Weight Optimization: Determina il contributo ottimale dei singoli modelli all'interno di 
+  un insieme per migliorare le prestazioni predittive complessive. Attraverso aggiustamenti iterativi 
+  (utilizzando Optuna) assegniamo l'influenza appropriata a ciascun modello. L’obiettivo è quello di 
+  raggiungere un insieme equilibrato che sfrutti i punti di forza dei suoi componenti mitigando al 
+  contempo i potenziali punti deboli, portando a un miglioramento del potere predittivo complessivo.
+
+Per generare il dataset sintetico abbiamo usato ACTGAN, che è un modello ottimizzato del CTGAN, basato sul GAN
+ (Generative Adversarial Network) che crea Dataset sintetici attraverso Neural Network. Il funzionamento
+  è molto semplice, abbiamo due reti neurali che si sfidano a vicenda al fine di migliorarsi:
+
+la prima, il discriminante, ha il compito di creare nuovi dati dati al fine di ingannare il discriminatore,
+ ovvero il secondo NN che invece è un discriminatore che ha il compito di distinguere dati creati dal
+generatore e reali. 
 
 Attraverso Gretel AI: https://github.com/gretelai/gretel-synthetics?tab=readme-ov-file
-Abbiamo trainato il nostro modello per creare il dataset sintetico. Gretel ci fornisce un set up ottimizato del GAN che in particolare non necessitano di trattare i nostri dati, il GAN originale necessava imputarli. 
-Gretel AI ci fornisce un interfaccia user friendly per creare il nostro dataset sintetico e che usa google colab per elaborare la nostra richiesta. Il modello di per se è molto pesante, nella documentazione infatti sono consigliati 32gb di RAM e GPU dedicata di nuova gen. Ho provato a trainare il modello sia in locale che in colab ma il processo era troppo lento. Fortunatamente l'interfaccia di cui parlavo prima fornisce il collegamento con google colab dove utilizzano le GPU fornite a pagamento tramite Colab, il training è durato poco piu' di due ore.
-In seguito al training è fornito un report che dimostra come il dataset sintetico creato rispecchi l'andamento del dataset originale, pur avendo dati diversi.
-Una volta trainato, è possibile scegliere il numero di righe richiesto per il dataset sintetico e generarlo usando il modello trainato in precedenza
+Abbiamo trainato il nostro modello per creare il dataset sintetico. Gretel ci fornisce un set up ottimizato
+ del GAN che in particolare non necessitano di trattare i nostri dati, il GAN originale necessava imputarli. 
+Gretel AI ci fornisce un interfaccia user friendly per creare il nostro dataset sintetico e che usa 
+google colab per elaborare la nostra richiesta. Il modello di per se è molto pesante, 
+nella documentazione infatti sono consigliati 32gb di RAM e GPU dedicata di nuova gen. 
+Ho provato a trainare il modello sia in locale che in colab ma il processo era troppo lento. 
+Fortunatamente l'interfaccia di cui parlavo prima fornisce il collegamento con google colab dove 
+utilizzano le GPU fornite a pagamento tramite Colab, il training è durato poco piu' di due ore.
+In seguito al training è fornito un report che dimostra come il dataset sintetico creato rispecchi 
+l'andamento del dataset originale, pur avendo dati diversi.
+Una volta trainato, è possibile scegliere il numero di righe richiesto per il dataset sintetico e
+generarlo usando il modello trainato in precedenza
 
 
