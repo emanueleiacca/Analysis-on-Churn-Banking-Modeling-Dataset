@@ -5,10 +5,19 @@ da migliorare il modello.
 
 In seguito, nella fase di preprocessing ci siamo posti la domanda di quale fosse il metodo per 
 trattare le classi sbilanciate, lo abbiamo dimostrato empiricamente, provando RandomUnderSampling,
-RandomOverSampling e Cost-Learning function. L'ultimo metodo si è dimostrato il migliore ed anche
-il piu' semplice da implementare in Optuna, c'è ovviamente da sottolineare che questo metodo, 
-cosi come tutte le tecniche di bilanciamento, suppone che il rapporto tra classe minoritaria e 
-totale sia lo stesso.
+RandomOverSampling e semplice sampling con Cost-Learning function: dopo il campionamento casuale, 
+l'apprendimento sensibile al costo entra in gioco. L'algoritmo di apprendimento viene addestrato per
+minimizzare una funzione di costo che tiene conto dei costi associati ai diversi tipi di errori. 
+Questo significa che durante l'addestramento, il modello sarà ottimizzato per fare previsioni che 
+minimizzano il costo complessivo, piuttosto che solo l'errore di classificazione. La combinazione 
+di campionamento casuale e apprendimento sensibile al costo può portare a un modello che è più 
+robusto rispetto all'imbilanciamento di classe e che tiene conto dei costi associati agli errori di 
+classificazione. Tuttavia, è importante considerare che il campionamento casuale potrebbe non 
+selezionare istanze basate sui loro costi associati, quindi potrebbe essere inefficace nel catturare
+completamente la complessità dei costi nel dataset.
+L'ultimo metodo si è dimostrato il migliore ed ancheil piu' semplice da implementare in Optuna, 
+c'è ovviamente da sottolineare che questo metodo, cosi come tutte le tecniche di bilanciamento, 
+suppone che il rapporto tra classe minoritaria e totale sia lo stesso.
 
 Utilizzando lo stesso metodo, abbiamo cercato anche la miglior metrica. In particolare abbiamo 
 utilizzato:
