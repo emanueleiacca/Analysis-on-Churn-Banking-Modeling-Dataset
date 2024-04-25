@@ -1,67 +1,85 @@
-Inizialmente ci siamo posti la domanda di quale metodo per trattare le classi sbilanciate sia il migliore,
-lo abbiamo dimostrato empiricamente, provando RandomUnderSampling, RandomOverSampling e Cost-Learning function.
-L'ultima si è dimostrata la migliore e la piu' semplice da implementare in Optuna, il problema è cosi come tutte
-le tecniche di bilanciamento suppone che il rateo tra classe minoritaria e totale sia lo stesso
+PROCEDIMENTO
+Prima di tutto, l'Analisi esplorativa e la Feature Engineering eseguita sul Dataset è servita
+a individuare eventuali errori nella raccolta dei dati e a modificare alcune variabili in modo 
+da migliorare il modello.
 
-Utilizzando lo stesso metodo, abbiamo cercato anche la miglior metrica. In particolare abbiamo analizzato:
-ROC AUC: empiricamente funziona bene ma vedendo il suo modo di ragionare attraverso i white box method di 
-Maria teresa abbiamo deciso di scartarlo
-Precision: consigliata dal prof, minimizza i FP cosa che a noi non interessa, risultati anche qui buoni 
-Recall : massimizza i TP non pensando ai FN, il che teoricamente fa al caso nostro ma i risultati empirici sono
-peggiori degli altri due
-FScore: bilanciando recall e precision (abbiamo provato B1 e B2 quindi con maggior peso su recall) i risultati
-sono anche qui nella media
-Rank method: nessuna metrica, abbiamo semplicemente ordinato in base alle probabilità e selezionato il 1:6 dei migliori.
-Quanti ne prendiamo ('si' predetti su 'si' totali) è il nostro score. Rappresenta la metrica finale richiesta nel task.
-Inoltre usa pred_proba che fa piu al caso nostro rispetto agli altri metodi che usano predict (tranne ROC-AUC)
+In seguito, nella fase di preprocessing ci siamo posti la domanda di quale fosse il metodo per 
+trattare le classi sbilanciate, lo abbiamo dimostrato empiricamente, provando RandomUnderSampling,
+RandomOverSampling e Cost-Learning function. L'ultimo metodo si è dimostrato il migliore ed anche
+il piu' semplice da implementare in Optuna, c'è ovviamente da sottolineare che questo metodo, 
+cosi come tutte le tecniche di bilanciamento, suppone che il rapporto tra classe minoritaria e 
+totale sia lo stesso.
 
-Optuna, è un framework per automatizzare la ricerca degli iperparametri. ù
-Supera GridSearchCv perché è più veloce, poiché utilizza più thread contemporaneamente, 
-è più efficiente, poiché possiamo provare ogni possibile configurazione di iperparametri in modo 
-efficiente utilizzando TPE Sampler, un algoritmo di ottimizzazione degli iperparametri bayesiani che apprende la relazione tra gli iperparametri
- e darci i migliori risultati in un tempo più breve. 
- Infatti abbiamo bisogno solo di 50 prove per avere i migliori risultati possibili
+Utilizzando lo stesso metodo, abbiamo cercato anche la miglior metrica. In particolare abbiamo 
+utilizzato:
+-ROC AUC: empiricamente sembra funzionare bene ma considerando il nostro obiettivo di analisi 
+potrebbero essere migliori altre metriche dal punto di vista logico: La curva ROC è utile per 
+valutare le prestazioni del modello in generale e per confrontare diversi modelli, ma non 
+necessariamente fornisce una misura diretta della capacità del modello di classificare correttamente
+le istanze della classe di interesse. 
+Inoltre, valutando le informazioni dedotte durante l'analisi esplorativa e applicando alcuni metodi
+di Interpretable Machine Learning, abbiamo osservato come effettivamente la curva ROC da minore 
+importanza a predittori che invece potrebbero essere più importanti nella previsione.
+-Precision: consigliata dal prof, minimizza i FP cosa che a noi non interessa, i risultati anche qui
+sembrano abbastanza buoni 
+-Recall : massimizza i TP non pensando ai FN, il che teoricamente fa al caso nostro, ma i risultati
+empirici sono peggiori rispetto a quelli della ROC AUC e della Precision
+-FScore: bilanciando Recall e Precision (abbiamo provato B1 e B2 quindi con maggior peso su Recall) 
+i risultati sono anche qui nella media
+-Rank method: nessuna metrica, abbiamo semplicemente ordinato in base alle probabilità e selezionato 
+il 1:6 dei migliori.
+E' stato considerato come score il rapporto di 'si' predetti su 'si' totali. Rappresenta la metrica 
+finale richiesta nel task. Inoltre utilizza pred_proba che fa più al caso nostro rispetto agli altri
+metodi che usano predict (eccetto ROC-AUC)
 
- Volevamo massimizzare i nostri risultati, quindi abbiamo applicato anche gli algoritmi Bootstrap.
-Bootstrap combina più algoritmi deboli come un albero decisionale per formarne uno più forte
+Optuna è un framework per automatizzare la ricerca degli iperparametri. 
+Supera GridSearchCv perché è più veloce, in quanto utilizza più thread contemporaneamente, inoltre
+è anche più efficiente, poiché possiamo provare ogni possibile configurazione di iperparametri in 
+modo efficiente utilizzando TPE Sampler, un algoritmo di ottimizzazione degli iperparametri bayesiani
+che apprende la relazione tra gli iperparametri e può darci i migliori risultati in un tempo più 
+breve. Infatti abbiamo avuto bisogno solo di 50 prove per avere i migliori risultati possibili.
 
-Il primo utilizzo è LightGBM, progettato da Google per grandi Dataset con molte variabili.
+Per massimizzare i nostri risultati abbiamo applicato anche degli algoritmi Bootstrap.
+Bootstrap combina più algoritmi deboli come un albero decisionale per formarne uno più forte, di
+seguito i metodi Bootstrap utilizzati:
+-LightGBM, progettato da Google per grandi Dataset con molte variabili.
 E' un Leaf-wise tree growth, ciò significa che l'albero cresce verticalmente una foglia alla volta,
- per selezionare quella foglia riduciamo la funzione loss al minimo e la espandiamo finché il nostro 
- albero non cattura qualsiasi modello e relazione nei dati, portando a una modello potente
+per selezionare quella foglia riduciamo la funzione loss al minimo e la espandiamo finché il nostro 
+albero non cattura qualsiasi modello e relazione nei dati, portando a una modello potente.
+-XGBoost, progettato da un ricercatore cinese, funziona in modo simile ma utilizza i metodi Lasso 
+e/o Ridge come penalità per prevenire l'overfitting e Tree Pruning per fermare la crescita 
+dell'albero quando si aggiungono nuove foglie che non contribuiscono in modo significativo a 
+ridurre la funzione loss(quindi quando è sotto una certa soglia): questo permette di avere
+un albero più efficiente e meno complesso.
+-Ensembling Weight Optimization: Determina il contributo ottimale dei singoli modelli all'interno di 
+un insieme per migliorare le prestazioni predittive complessive. Attraverso aggiustamenti iterativi 
+(utilizzando Optuna) assegniamo l'influenza appropriata a ciascun modello. L’obiettivo è quello di 
+raggiungere un insieme equilibrato che sfrutti i punti di forza dei suoi componenti mitigando al 
+contempo i potenziali punti deboli, portando a un miglioramento del potere predittivo complessivo.
 
- XGBoost è stato invece progettato da un ricercatore cinese, funziona in modo simile ma 
- l'uso di Lasso o Ridge come penalità per prevenire l'overfitting e Tree Pruning per fermare 
- la crescita dell'albero quando si aggiungono nuove foglie che non contribuiscono in modo significativo a 
- ridurre la funzione loss(quindi quando è sotto una certa soglia)
-  questo porta ad un albero più efficiente e meno complesso
-
-  Ensembling Weight Optimization: Determina il contributo ottimale dei singoli modelli all'interno di 
-  un insieme per migliorare le prestazioni predittive complessive. Attraverso aggiustamenti iterativi 
-  (utilizzando Optuna) assegniamo l'influenza appropriata a ciascun modello. L’obiettivo è quello di 
-  raggiungere un insieme equilibrato che sfrutti i punti di forza dei suoi componenti mitigando al 
-  contempo i potenziali punti deboli, portando a un miglioramento del potere predittivo complessivo.
-
-Per generare il dataset sintetico abbiamo usato ACTGAN, che è un modello ottimizzato del CTGAN, basato sul GAN
- (Generative Adversarial Network) che crea Dataset sintetici attraverso Neural Network. Il funzionamento
-  è molto semplice, abbiamo due reti neurali che si sfidano a vicenda al fine di migliorarsi:
-
-la prima, il discriminante, ha il compito di creare nuovi dati dati al fine di ingannare il discriminatore,
- ovvero il secondo NN che invece è un discriminatore che ha il compito di distinguere dati creati dal
-generatore e reali. 
+APPLICAZIONE DEGLI STESSI METODI SU UN DATASET SINTETICO
+Per generare il dataset sintetico abbiamo usato ACTGAN, che è un modello ottimizzato del CTGAN, 
+basato sul GAN(Generative Adversarial Network) che crea Dataset sintetici attraverso Neural Network.
+Il funzionamento è molto semplice, ci sono due reti neurali che si sfidano a vicenda al fine di 
+migliorarsi: la prima, il discriminante, ha il compito di creare nuovi dati dati al fine di ingannare
+il discriminatore, ovvero la seconda NN che invece è un discriminatore che ha il compito di 
+distinguere dati creati dal generatore e reali. 
 
 Attraverso Gretel AI: https://github.com/gretelai/gretel-synthetics?tab=readme-ov-file
-Abbiamo trainato il nostro modello per creare il dataset sintetico. Gretel ci fornisce un set up ottimizato
- del GAN che in particolare non necessitano di trattare i nostri dati, il GAN originale necessava imputarli. 
-Gretel AI ci fornisce un interfaccia user friendly per creare il nostro dataset sintetico e che usa 
+Abbiamo trainato il modello per creare il dataset sintetico. Gretel ci fornisce un set up ottimizato
+del GAN che in particolare non necessitano di trattare i dati, il GAN originale necessava imputarli. 
+Gretel AI fornisce un interfaccia user friendly per creare il dataset sintetico e che usa 
 google colab per elaborare la nostra richiesta. Il modello di per se è molto pesante, 
 nella documentazione infatti sono consigliati 32gb di RAM e GPU dedicata di nuova gen. 
-Ho provato a trainare il modello sia in locale che in colab ma il processo era troppo lento. 
-Fortunatamente l'interfaccia di cui parlavo prima fornisce il collegamento con google colab dove 
-utilizzano le GPU fornite a pagamento tramite Colab, il training è durato poco piu' di due ore.
-In seguito al training è fornito un report che dimostra come il dataset sintetico creato rispecchi 
-l'andamento del dataset originale, pur avendo dati diversi.
-Una volta trainato, è possibile scegliere il numero di righe richiesto per il dataset sintetico e
-generarlo usando il modello trainato in precedenza
+Si è provato a trainare il modello sia in locale che in colab ma il processo era troppo lento. 
+Fortunatamente l'interfaccia di cui si è parlato prima fornisce il collegamento con google colab dove 
+si utilizzano GPU fornite a pagamento tramite Colab, il training è durato poco piu' di due ore.
+In seguito al training è stato fornito un report che dimostra come il dataset sintetico creato
+rispecchi l'andamento del dataset originale, pur avendo dati diversi. Una volta trainato, è possibile
+scegliere il numero di righe richiesto per il dataset sintetico e generarlo usando il modello trainato 
+in precedenza.
+
+
+
 
 
