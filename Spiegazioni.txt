@@ -3,6 +3,8 @@ Prima di tutto, l'Analisi esplorativa e la Feature Engineering eseguita sul Data
 a individuare eventuali errori nella raccolta dei dati e a modificare alcune variabili in modo 
 da migliorare il modello.
 
+
+
 SAMPLING METHOD CHOICE
 Nella fase di preprocessing ci siamo posti la domanda di quale fosse il metodo per 
 trattare le classi sbilanciate, lo abbiamo dimostrato empiricamente, provando:
@@ -26,7 +28,17 @@ L'ultimo metodo si è dimostrato il migliore ed ancheil piu' semplice da impleme
 c'è ovviamente da sottolineare che questo metodo, cosi come tutte le tecniche di bilanciamento, 
 suppone che il rapporto tra classe minoritaria e totale sia lo stesso.
 
-THE ALGORITHMS USED
+
+
+OPTUNA
+Optuna è un framework per automatizzare la ricerca degli iperparametri. 
+Supera GridSearchCv perché è più veloce, in quanto utilizza più thread contemporaneamente, inoltre
+è anche più efficiente, poiché possiamo provare ogni possibile configurazione di iperparametri in 
+modo efficiente utilizzando TPE Sampler, un algoritmo di ottimizzazione degli iperparametri bayesiani
+che apprende la relazione tra gli iperparametri e può darci i migliori risultati in un tempo più 
+breve. Infatti abbiamo avuto bisogno solo di 50 prove per avere i migliori risultati possibili.
+
+THE ALGORITHMS USED WITH OPTUNA TUNING
 Per massimizzare i risultati abbiamo applicato anche degli algoritmi Boosting.
 Boosting combina più algoritmi deboli come un albero decisionale per formarne uno più forte, di
 seguito i metodi Boosting utilizzati:
@@ -39,14 +51,50 @@ e/o Ridge come penalità per prevenire l'overfitting e Tree Pruning per fermare 
 dell'albero quando si aggiungono nuove foglie che non contribuiscono in modo significativo a 
 ridurre la funzione loss(quindi quando è sotto una certa soglia): questo permette di avere
 un albero più efficiente e meno complesso.
--Ensembling Weight Optimization: Determina il contributo ottimale dei singoli modelli all'interno di 
+-Ensembling Weight Optimization, Determina il contributo ottimale dei singoli modelli all'interno di 
 un insieme per migliorare le prestazioni predittive complessive. Attraverso aggiustamenti iterativi 
 (utilizzando Optuna) assegniamo l'influenza appropriata a ciascun modello. L’obiettivo è quello di 
 raggiungere un insieme equilibrato che sfrutti i punti di forza dei suoi componenti mitigando al 
 contempo i potenziali punti deboli, portando a un miglioramento del potere predittivo complessivo.
+Il metodo scelto è proprio quest'ultimo, che sembra avere performance migliori proprio perchè 
+considera i diversi algoritmi assieme.
+
+Durante l'applicazione di ogni algoritmo, sono stati eseguiti i seguenti passaggi:
+-Split in train e test con random sampling
+-Scelta dei parametri di tuning, tra cui la cost learning function
+-Tuning dei parametri con Optuna, che ha permesso di osservare quali fossero i migliori parametri da 
+utilizzare nel modello. I primi grafici riguardo la scelta dei parametri hanno dato le seguenti informazioni:
+    -L'history plot in Optuna è un grafico che mostra come variano le prestazioni nel corso delle iterazioni di
+    ottimizzazione, sull'asse x, ogni punto rappresenta uno specifico "trial" o iterazione del processo di 
+    ricerca degli iperparametri. Interpretando l'history plot, puoi osservare come varia la funzione obiettivo 
+    (ad esempio la loss o l'accuracy) al variare delle diverse combinazioni di iperparametri valutate durante 
+    il processo di ottimizzazione. L'obiettivo è trovare la combinazione di iperparametri che massimizza o minimizza 
+    la funzione obiettivo, indicando prestazioni ottimali del modello. La linea rossa collega alcuni punti nell'history 
+    plot per mostrare la sequenza temporale delle iterazioni e come le prestazioni del modello si sono evolute nel corso 
+    del tempo. 
+    -L'hyperparameters importance, 'importanza dei parametri può essere utilizzata per identificare le caratteristiche più 
+    influenti o rilevanti per il modello. Questo può aiutare a ridurre la dimensionalità del dataset, eliminando le 
+    caratteristiche meno informative e riducendo così il rischio di overfitting e migliorando le prestazioni del modello.
+    -Lo slice plot, è una visualizzazione che mostra come varia la predizione del modello al variare di un parametro, 
+    mantenendo costanti tutti gli altri.
+-Applicazione del modello con i parametri scelti grazie ad Optuna, è stata utilizzata anche la cross validation per 
+ridurre l'overfitting ed avere un modello più stabile
+-Valutazione dei risultati: osservazione di quanti 'si' sono stati selezionati correttamente nei primi 10k (i 10k sono
+scelti tra i primi 10000 con maggiore probabilità di appartenere alla classe 'si' )
+
+Infine, con la curva di apprendimento si è voluto verificare la capacità di generalizzare del modello: la capacità di 
+generalizzazione di un modello si riferisce alla sua capacità di fare previsioni accurate su dati non visti, cioè su 
+dati che non sono stati utilizzati durante il processo di addestramento. 
+Se le curve convergono e mostrano prestazioni simili sia sui dati di addestramento che sui dati di test, ciò suggerisce 
+che il modello generalizza bene e che non vi è overfitting. Se le curve rimangono distanti tra loro, con prestazioni 
+significativamente migliori sui dati di addestramento rispetto ai dati di test, potrebbe essere indicativo di overfitting, 
+cioè il modello si adatta troppo ai dati di addestramento e non generalizza bene su nuovi dati.
+
+
 
 METRIC CHOICE
-Sui vari modelli utilizzati si è provato anche ad individuare la metrica migliore:
+Si è provato anche ad individuare la metrica migliore, lavorando sull'algoritmo LGBM Boost (perchè 
+è l'algoritmo più veloce tra quellli selezionati) e valutando le seguenti metriche:
 -ROC AUC: empiricamente sembra funzionare bene ma considerando il nostro obiettivo di analisi 
 potrebbero essere migliori altre metriche dal punto di vista logico: La curva ROC è utile per 
 valutare le prestazioni del modello in generale e per confrontare diversi modelli, ma non 
@@ -67,13 +115,6 @@ E' stato considerato come score il rapporto di 'si' predetti su 'si' totali. Rap
 finale richiesta nel task. Inoltre utilizza pred_proba che fa più al caso nostro rispetto agli altri
 metodi che usano predict (eccetto ROC-AUC)
 
-OPTUNA
-Optuna è un framework per automatizzare la ricerca degli iperparametri. 
-Supera GridSearchCv perché è più veloce, in quanto utilizza più thread contemporaneamente, inoltre
-è anche più efficiente, poiché possiamo provare ogni possibile configurazione di iperparametri in 
-modo efficiente utilizzando TPE Sampler, un algoritmo di ottimizzazione degli iperparametri bayesiani
-che apprende la relazione tra gli iperparametri e può darci i migliori risultati in un tempo più 
-breve. Infatti abbiamo avuto bisogno solo di 50 prove per avere i migliori risultati possibili.
 
 APPLICAZIONE DEGLI STESSI METODI SU UN DATASET SINTETICO
 Per generare il dataset sintetico abbiamo usato ACTGAN, che è un modello ottimizzato del CTGAN, 
