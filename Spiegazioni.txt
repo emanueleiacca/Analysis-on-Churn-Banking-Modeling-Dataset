@@ -107,11 +107,20 @@ importanza a predittori che invece potrebbero essere più importanti nella previ
 sembrano abbastanza buoni 
 -Recall : massimizza i TP non pensando ai FN, il che teoricamente fa al caso nostro, ma i risultati
 empirici sono peggiori rispetto a quelli della ROC AUC e della Precision
--FScore: bilanciando Recall e Precision (abbiamo provato B1 e B2 quindi con maggior peso su Recall) 
+-FScore: bilanciando Recall e Precision (abbiamo provato F1 e F2 quindi con maggior peso su Recall) 
 i risultati sono anche qui nella media
 -Rank method: nessuna metrica, abbiamo semplicemente ordinato in base alle probabilità e selezionato 
-il 1:6 dei migliori.
-E' stato considerato come score il rapporto di 'si' predetti su 'si' totali. Rappresenta la metrica 
+il 1:6 dei migliori.E' stato considerato come score il rapporto di 'si' predetti su 'si' totali. 
+
+
+I Risultati sul Dataset sono i seguenti:
+-Rank probabilities: Numero di 'si' 310/383
+-Roc Auc:
+-Recall:
+-Precision:
+-F1:
+-F2:
+Rappresenta la metrica 
 finale richiesta nel task. Inoltre utilizza pred_proba che fa più al caso nostro rispetto agli altri
 metodi che usano predict (eccetto ROC-AUC)
 
