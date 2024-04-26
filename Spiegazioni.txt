@@ -1,4 +1,4 @@
-WARNING: Spiegare meglio metric choice
+WARNING: Spiegare meglio metric choice e a cosa è servito il dataset sintetico
 
 
 START
@@ -116,25 +116,43 @@ i risultati sono anche qui nella media
 il 1:6 dei migliori.E' stato considerato come score il rapporto di 'si' predetti su 'si' totali. 
 
 
-I Risultati sul Dataset sono i seguenti:
--Rank probabilities: Numero di 'si' 298/383, FN=73
--Roc Auc: Numero di 'si' 305/383, FN=305/383, FN=378
--Recall: Numero di 'si' 289/383, FN= 69
--Precision: Numero di 'si' 294/383, FN=332
--F1: Numero di 'si' 289/383, FN=308
--F2: Numero di 'si' 305/383, FN=261
+Per il dataset originale i risultati sul Dataset sono i seguenti:
+-Rank probabilities: Numero di 'si' 308/383, FN=72
+-Roc Auc: Numero di 'si' 313/383, FN=305/383, FN=375
+-Recall: Numero di 'si' 297/383, FN=71
+-Precision: Numero di 'si' 301/383, FN=334
+-F1: Numero di 'si' 301/383, FN=334
+-F2: Numero di 'si' 296/383, FN=225
 
 I risultati sul Dataset sintetico:
--Rank probabilities: Numero di 'si' 302/489
--Roc Auc: Numero di 'si' 319/489
--Recall: Numero di 'si' 222/489
--Precision: Numero di 'si' 222/489
--F1: Numero di 'si' 216/489
--F2: Numero di 'si' 218/489
+-Rank probabilities: Numero di 'si' 305/489
+-Roc Auc: Numero di 'si' 312/489
+-Recall: Numero di 'si' 200/489
+-Precision: Numero di 'si' 212/489
+-F1: Numero di 'si' 212/489
+-F2: Numero di 'si' 213/489
+
+
+
+Per il dataset pulito i risultati sul Dataset sono i seguenti:
+-Rank probabilities: Numero di 'si' 298/383, FN=
+-Roc Auc: Numero di 'si' 305/383, FN=305/383, FN=
+-Recall: Numero di 'si' 200/383, FN= 
+-Precision: Numero di 'si' 294/383, FN=
+-F1: Numero di 'si' 289/383, FN=
+-F2: Numero di 'si' 305/383, FN=
+I risultati sul Dataset sintetico:
+-Rank probabilities: Numero di 'si' /489
+-Roc Auc: Numero di 'si' /489
+-Recall: Numero di 'si' /489
+-Precision: Numero di 'si' /489
+-F1: Numero di 'si' /489
+-F2: Numero di 'si' /489
+
 
 Le metriche migliori sembrano essere Recall e Rank Probabilities, ciò rispecchia anche logicamente l'obiettivo di analisi, ossia 
 individuare quanti più appartenenti alla classe 'si' veritieri. In questo modello bisogna dare più importanza ai falsi negativi.
-
+La metrica scelta è Rank probabilities
 
 APPLICAZIONE DEGLI STESSI METODI SU UN DATASET SINTETICO
 Per generare il dataset sintetico abbiamo usato ACTGAN, che è un modello ottimizzato del CTGAN, 
