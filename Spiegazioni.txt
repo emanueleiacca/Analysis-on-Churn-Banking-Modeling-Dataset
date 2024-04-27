@@ -121,33 +121,48 @@ il 1:6 dei migliori. E' stato considerato come score il rapporto di 'si' predett
 
 Per il dataset originale i risultati sul Dataset sono i seguenti:
 -Rank probabilities: Numero di 'si' 308/383, FN=72
--Roc Auc: Numero di 'si' 313/383, FN=305/383, FN=375
+-Roc Auc: Numero di 'si' 313/383,  FN=375
 -Recall: Numero di 'si' 297/383, FN=71
 -Precision: Numero di 'si' 301/383, FN=334
 -F1: Numero di 'si' 301/383, FN=334
 -F2: Numero di 'si' 296/383, FN=225
 I risultati sul Dataset sintetico:
--Rank probabilities: Numero di 'si' 305/489
--Roc Auc: Numero di 'si' 312/489
+-Rank probabilities: Numero di 'si' 215/489
+-Roc Auc: Numero di 'si' 217/489
 -Recall: Numero di 'si' 200/489
 -Precision: Numero di 'si' 212/489
 -F1: Numero di 'si' 212/489
 -F2: Numero di 'si' 213/489
 
 Per il dataset pulito i risultati sul Dataset sono i seguenti:
--Rank probabilities: Numero di 'si' 299/383, FN=84
--Roc Auc: Numero di 'si' 309/383, FN=376
--Recall: Numero di 'si' 300/383, FN=73
--Precision: Numero di 'si' 295/383, FN=317
--F1: Numero di 'si' 279/383, FN=307
--F2: Numero di 'si' 299/383, FN=254
+-Rank probabilities: Numero di 'si' 297/383, FN=83
+-Roc Auc: Numero di 'si' 305/383, FN=378
+-Recall: Numero di 'si' 289/383, FN=69
+-Precision: Numero di 'si' 294/383, FN=332
+-F1: Numero di 'si' 289/383, FN=308
+-F2: Numero di 'si' 291/383, FN=261
 I risultati sul Dataset sintetico:
--Rank probabilities: Numero di 'si' 295/489
--Roc Auc: Numero di 'si' 317/489
--Recall: Numero di 'si' 203/489
--Precision: Numero di 'si' 213/489
--F1: Numero di 'si' 199/489
--F2: Numero di 'si' 213/489
+-Rank probabilities: Numero di 'si' 207/489
+-Roc Auc: Numero di 'si' 223/489
+-Recall: Numero di 'si' 198/489
+-Precision: Numero di 'si' 222/489
+-F1: Numero di 'si' 216/489
+-F2: Numero di 'si' 218/489
+
+Per il dataset pulito senza log i risultati sul Dataset sono i seguenti:
+-Rank probabilities: Numero di 'si' 297/383, FN=83
+-Roc Auc: Numero di 'si' 305/383, FN=378
+-Recall: Numero di 'si' 289/383, FN=69
+-Precision: Numero di 'si' 294/383, FN=332
+-F1: Numero di 'si' 289/383, FN=308
+-F2: Numero di 'si' 291/383, FN=261
+I risultati sul Dataset sintetico:
+-Rank probabilities: Numero di 'si' 207/489
+-Roc Auc: Numero di 'si' 223/489
+-Recall: Numero di 'si' 198/489
+-Precision: Numero di 'si' 222/489
+-F1: Numero di 'si' 216/489
+-F2: Numero di 'si' 218/489
 
 
 Le metriche migliori sembrano essere Recall e Rank Probabilities, ciò rispecchia anche logicamente l'obiettivo di analisi, ossia 
