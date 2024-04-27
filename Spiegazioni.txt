@@ -97,7 +97,10 @@ cioè il modello si adatta troppo ai dati di addestramento e non generalizza ben
 
 METRIC CHOICE
 Si è provato anche ad individuare la metrica migliore, lavorando sull'algoritmo LGBM Boost (perchè 
-è l'algoritmo più veloce tra quellli selezionati) e valutando le seguenti metriche:
+è l'algoritmo più veloce tra quellli selezionati). E' stato eseguito il tuning con cross validation selezionando volta per 
+volta la metrica da massimizzare e si sono esservati i risultati.
+
+Abbiamo valutando le seguenti metriche:
 -ROC AUC: empiricamente sembra funzionare bene ma considerando il nostro obiettivo di analisi 
 potrebbero essere migliori altre metriche dal punto di vista logico: La curva ROC è utile per 
 valutare le prestazioni del modello in generale e per confrontare diversi modelli, ma non 
@@ -113,7 +116,7 @@ empirici sono peggiori rispetto a quelli della ROC AUC e della Precision
 -FScore: bilanciando Recall e Precision (abbiamo provato F1 e F2 quindi con maggior peso su Recall) 
 i risultati sono anche qui nella media
 -Rank method: nessuna metrica, abbiamo semplicemente ordinato in base alle probabilità e selezionato 
-il 1:6 dei migliori.E' stato considerato come score il rapporto di 'si' predetti su 'si' totali. 
+il 1:6 dei migliori. E' stato considerato come score il rapporto di 'si' predetti su 'si' totali. 
 
 
 Per il dataset originale i risultati sul Dataset sono i seguenti:
