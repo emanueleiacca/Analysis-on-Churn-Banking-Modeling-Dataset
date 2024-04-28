@@ -109,7 +109,7 @@ le istanze della classe di interesse.
 Inoltre, valutando le informazioni dedotte durante l'analisi esplorativa e applicando alcuni metodi
 di Interpretable Machine Learning, abbiamo osservato come effettivamente la curva ROC da minore 
 importanza a predittori che invece potrebbero essere più importanti nella previsione.
--Precision: consigliata dal prof, minimizza i FP cosa che a noi non interessa, i risultati anche qui
+-Precision: consigliata dal professore, minimizza i FP cosa che a noi non interessa, i risultati anche qui
 sembrano abbastanza buoni 
 -Recall : massimizza i TP non pensando ai FN, il che teoricamente fa al caso nostro, ma i risultati
 empirici sono peggiori rispetto a quelli della ROC AUC e della Precision
