@@ -150,19 +150,19 @@ I risultati sul Dataset sintetico:
 -F2: Numero di 'si' 218/489
 
 Per il dataset pulito senza log i risultati sul Dataset sono i seguenti:
--Rank probabilities: Numero di 'si' 305/383, FN=76
--Roc Auc: Numero di 'si' 308/383, FN=375
--Recall: Numero di 'si' 296/383, FN=73
--Precision: Numero di 'si' 297/383, FN=321
--F1: Numero di 'si' 297/383, FN=321
--F2: Numero di 'si' 300/383, FN=257
+-Rank probabilities: Numero di 'si' 299/383, FN=72
+-Roc Auc: Numero di 'si' 303/383, FN=377
+-Recall: Numero di 'si' 291/383, FN=70
+-Precision: Numero di 'si' 295/383, FN=325
+-F1: Numero di 'si' 295/383, FN=325
+-F2: Numero di 'si' 289/383, FN=265
 I risultati sul Dataset sintetico:
--Rank probabilities: Numero di 'si' 201/489
+-Rank probabilities: Numero di 'si' 224/489
 -Roc Auc: Numero di 'si' 211/489
--Recall: Numero di 'si' 202/489
--Precision: Numero di 'si' 209/489
--F1: Numero di 'si' 209/489
--F2: Numero di 'si' 207/489
+-Recall: Numero di 'si' 206/489
+-Precision: Numero di 'si' 208/489
+-F1: Numero di 'si' 208/489
+-F2: Numero di 'si' 219/489
 
 
 Le metriche migliori sembrano essere Recall e Rank Probabilities, ciò rispecchia anche logicamente 
