@@ -203,11 +203,18 @@ Per comprendere meglio il processo di addestramento dei 3 modelli utilizzati, ab
 tecniche di interpretable machine learning, utili a spiegare come il modello ha trainato i dati, ad esempio
 a quali variabili ha dato più importanza, se queste hanno influito negativamente o positivamente alle previsioni.
 - Shapley Values: Le variabili con un effetto negativo (rappresentato dal colore blu) hanno un'associazione inversa 
-con la target. Ciò significa che valori più alti della variabile sono associati a una diminuzione della probabilità 
-che un cliente richieda l'estinzione del conto corrente (CC) o abbandoni la banca. Nel Force plot,sull'asse x 
-vengono rappresentate le feature e sull'asse y i valori SHAP (SHapley Additive exPlanations) associati a ciascuna 
-feature. I valori SHAP rappresentano l'importanza della feature nel modello e quanto essa contribuisce a spingere 
-la predizione del modello verso una classe, nel nostro caso, verso le classi 'si' o 'no'.
+con la target. Ciò significa che valori di shapley più alti della variabile sono associati a una diminuzione della probabilità 
+che un cliente richieda l'estinzione del conto corrente (CC) o abbandoni la banca, quindi che appartenga alla classe 'no'.
+Il calcolo del valore di Shapley coinvolge i seguenti passaggi:
+
+Come si calcolano i valori di Shapley: 
+generazione di tutti i sottoinsiemi di feature: Per calcolare il valore di Shapley per una feature 
+𝑖, dobbiamo considerare tutte le possibili combinazioni di feature che includono 𝑖 insieme a un insieme di feature 𝑆
+diverse da 𝑖. Calcolo della contribuzione marginale: Per ogni combinazione di feature, calcoliamo la predizione del 
+modello sia con che senza la feature 𝑖. La differenza tra la predizione del modello con 𝑖 e senza 𝑖 rappresenta la 
+contribuzione marginale della feature 𝑖 in quella particolare combinazione di feature. 
+La media delle contribuzioni marginale su tutte le combinazioni: Calcoliamo la media delle contribuzioni marginali su 
+tutte le combinazioni di feature rappresenta il valore di Shapley per la feature 𝑖.
 
 
 
