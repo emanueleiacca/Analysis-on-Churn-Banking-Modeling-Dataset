@@ -1,12 +1,13 @@
-WARNING: Spiegare meglio metric choice e a cosa è servito il dataset sintetico
-
+WARNING: Spiegare meglio metric choice 
 
 START
 Prima di tutto, l'Analisi esplorativa e la Feature Engineering eseguita sul Dataset è servita
 a individuare eventuali errori nella raccolta dei dati e a modificare alcune variabili in modo 
-da migliorare il modello.
-
-
+da migliorare il modello. Abbiamo deciso di rimuovere Id_Cliente e poi 3 variabili correlate 
+oltre lo 0.9, mantenendo poi il dataset iniziale quasi grezzo, effettuando solo l'encoding di 
+alcune variabili categoriche. Questa scelta è stata presa in relazione all'obiettivo di analisi, 
+in modo da perdere meno informazione possibile. Anche i valori mancanti non sono stati trattati, 
+in quanto gli algoritmi di boosting utilizzati sono stati progettati per gestirli in automatico.
 
 SAMPLING METHOD CHOICE
 Nella fase di preprocessing ci siamo posti la domanda di quale fosse il metodo per 
@@ -22,12 +23,16 @@ bilanciamento tra le classi.
 gioco. L'algoritmo di apprendimento viene addestrato per minimizzare una funzione di costo che tiene 
 conto dei costi associati ai diversi tipi di errori: durante l'addestramento, il modello sarà ottimizzato 
 per fare previsioni che minimizzano il costo complessivo, piuttosto che solo l'errore di classificazione. 
+Questa funzione assegna un valore numerico che rappresenta il costo o la perdita associata a una previsione 
+errata o a una decisione sbagliata. La cost-learning function è utilizzata per addestrare i modelli di 
+apprendimento automatico al fine di minimizzare il costo complessivo delle previsioni errate. 
 La combinazione di campionamento casuale e Cost-Learning function può portare a un modello che è più 
 robusto rispetto allo sbilanciamento delle classi e che tiene conto dei costi associati agli errori di 
 classificazione. Tuttavia, è importante considerare che il campionamento casuale potrebbe non 
 selezionare istanze basate sui loro costi associati, quindi potrebbe essere inefficace nel catturare
 completamente la complessità dei costi nel dataset.
-L'ultimo metodo si è dimostrato il migliore ed ancheil piu' semplice da implementare in Optuna, 
+
+L'ultimo metodo si è dimostrato il migliore ed anche il piu' semplice da implementare in Optuna, 
 c'è ovviamente da sottolineare che questo metodo, cosi come tutte le tecniche di bilanciamento, 
 suppone che il rapporto tra classe minoritaria e totale sia lo stesso.
 
@@ -111,7 +116,7 @@ di Interpretable Machine Learning, abbiamo osservato come effettivamente la curv
 importanza a predittori che invece potrebbero essere più importanti nella previsione.
 -Precision: consigliata dal professore, minimizza i FP cosa che a noi non interessa, i risultati anche qui
 sembrano abbastanza buoni 
--Recall : massimizza i TP non pensando ai FN, il che teoricamente fa al caso nostro, ma i risultati
+-Recall : massimizza i TP, il che teoricamente fa al caso nostro, ma i risultati
 empirici sono peggiori rispetto a quelli della ROC AUC e della Precision
 -FScore: bilanciando Recall e Precision (abbiamo provato F1 e F2 quindi con maggior peso su Recall) 
 i risultati sono anche qui nella media
@@ -193,7 +198,16 @@ rispecchi l'andamento del dataset originale, pur avendo dati diversi. Una volta 
 scegliere il numero di righe richiesto per il dataset sintetico e generarlo usando il modello trainato 
 in precedenza.
 
-
+FROM BLACKBOX TO WHITEBOX
+Per comprendere meglio il processo di addestramento dei 3 modelli utilizzati, abbiamo utilizzato delle 
+tecniche di interpretable machine learning, utili a spiegare come il modello ha trainato i dati, ad esempio
+a quali variabili ha dato più importanza, se queste hanno influito negativamente o positivamente alle previsioni.
+- Shapley Values: Le variabili con un effetto negativo (rappresentato dal colore blu) hanno un'associazione inversa 
+con la target. Ciò significa che valori più alti della variabile sono associati a una diminuzione della probabilità 
+che un cliente richieda l'estinzione del conto corrente (CC) o abbandoni la banca. Nel Force plot,sull'asse x 
+vengono rappresentate le feature e sull'asse y i valori SHAP (SHapley Additive exPlanations) associati a ciascuna 
+feature. I valori SHAP rappresentano l'importanza della feature nel modello e quanto essa contribuisce a spingere 
+la predizione del modello verso una classe, nel nostro caso, verso le classi 'si' o 'no'.
 
 
 
