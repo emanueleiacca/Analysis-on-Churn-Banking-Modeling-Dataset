@@ -2,7 +2,7 @@
 
 This project explores building a model to predict customer churn, allowing a business to identify customers at risk of closing their accounts. The goal is to predict on a different dataset the top 10000 clients more likely to close their account
 
-![Uploading Customer_Churn_Prediction_Models_in_Machine_Learning.png…]()
+![Customer_Churn_Prediction_Models_in_Machine_Learning](https://github.com/emanueleiacca/Analysis-on-Churn-Banking-Modeling-Dataset/assets/128679981/edc858ae-0ef5-441b-a980-a4674d9cb1b7)
 
 
 ## Methodology
