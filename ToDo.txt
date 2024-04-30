@@ -1,8 +1,0 @@
-goal: individuare i migliori 10k clienti della banca (sono quelli che sicuro non abbandonano) prob(y_flag='si')>(SELECT max)
-test su un altro dataset simile : FATTO
-EDA : FATTO
-+ modelli con tuning, poi facciamo ensembling : FATTO
-mostrare tutte le metriche : FATTO
-data quality :
-feature engeneering :
-migliore metrica?

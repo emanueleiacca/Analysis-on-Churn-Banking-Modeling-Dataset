@@ -36,8 +36,6 @@ L'ultimo metodo si è dimostrato il migliore ed anche il piu' semplice da implem
 c'è ovviamente da sottolineare che questo metodo, cosi come tutte le tecniche di bilanciamento, 
 suppone che il rapporto tra classe minoritaria e totale sia lo stesso.
 
-
-
 OPTUNA
 Optuna è un framework per automatizzare la ricerca degli iperparametri. 
 Supera GridSearchCv perché è più veloce, in quanto utilizza più thread contemporaneamente, inoltre
@@ -50,20 +48,33 @@ THE ALGORITHMS USED WITH OPTUNA TUNING
 Per massimizzare i risultati abbiamo applicato anche degli algoritmi Boosting.
 Boosting combina più algoritmi deboli come un albero decisionale per formarne uno più forte, di
 seguito i metodi Boosting utilizzati:
+
 -LightGBM, progettato da Google per grandi Dataset con molte variabili.
 E' un Leaf-wise tree growth, ciò significa che l'albero cresce verticalmente una foglia alla volta,
 per selezionare quella foglia riduciamo la funzione loss al minimo e la espandiamo finché il nostro 
 albero non cattura qualsiasi modello e relazione nei dati, portando a una modello potente.
+
 -XGBoost, progettato da un ricercatore cinese, funziona in modo simile ma utilizza i metodi Lasso 
 e/o Ridge come penalità per prevenire l'overfitting e Tree Pruning per fermare la crescita 
 dell'albero quando si aggiungono nuove foglie che non contribuiscono in modo significativo a 
 ridurre la funzione loss(quindi quando è sotto una certa soglia): questo permette di avere
 un albero più efficiente e meno complesso.
+
+- Catboost: sviluppato da Yandex, segue un approccio iterativo, costruendo un insieme di alberi di
+ decisione deboli sequenzialmente. Ad ogni iterazione, viene selezionato l'albero che minimizza la
+  funzione di perdita complessiva (CatBoost Loss Function, basata su Ordered Permutation e Pairwise
+   Comparison.) CatBoost implementa una tecnica di Pruning Regolarizzato per fermare la crescita 
+   degli alberi. A differenza di altri algoritmi che utilizzano una soglia fissa, CatBoost combina 
+   il guadagno di informazione con la complessità del modello per ottimizzare la struttura degli alberi.
+CatBoost impiega un algoritmo di ricerca degli alberi più sofisticato, basato su Column-wise Sampling
+ e Greedy Feature Selection. Questo approccio porta a modelli più efficienti e precisi.
+ 
 -Ensembling Weight Optimization, Determina il contributo ottimale dei singoli modelli all'interno di 
 un insieme per migliorare le prestazioni predittive complessive. Attraverso aggiustamenti iterativi 
 (utilizzando Optuna) assegniamo l'influenza appropriata a ciascun modello. L’obiettivo è quello di 
 raggiungere un insieme equilibrato che sfrutti i punti di forza dei suoi componenti mitigando al 
 contempo i potenziali punti deboli, portando a un miglioramento del potere predittivo complessivo.
+
 Il metodo scelto è proprio quest'ultimo, che sembra avere performance migliori proprio perchè 
 considera i diversi algoritmi assieme.
 
