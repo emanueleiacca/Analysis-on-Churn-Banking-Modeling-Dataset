@@ -60,14 +60,16 @@ dell'albero quando si aggiungono nuove foglie che non contribuiscono in modo sig
 ridurre la funzione loss(quindi quando è sotto una certa soglia): questo permette di avere
 un albero più efficiente e meno complesso.
 
-- Catboost: sviluppato da Yandex, segue un approccio iterativo, costruendo un insieme di alberi di
- decisione deboli sequenzialmente. Ad ogni iterazione, viene selezionato l'albero che minimizza la
-  funzione di perdita complessiva (CatBoost Loss Function, basata su Ordered Permutation e Pairwise
-   Comparison.) CatBoost implementa una tecnica di Pruning Regolarizzato per fermare la crescita 
-   degli alberi. A differenza di altri algoritmi che utilizzano una soglia fissa, CatBoost combina 
-   il guadagno di informazione con la complessità del modello per ottimizzare la struttura degli alberi.
-CatBoost impiega un algoritmo di ricerca degli alberi più sofisticato, basato su Column-wise Sampling
- e Greedy Feature Selection. Questo approccio porta a modelli più efficienti e precisi.
+- Catboost:
+CatBoost è un algoritmo di machine learning sviluppato da Yandex che si basa su un approccio iterativo per costruire un insieme di alberi decisionali deboli in modo sequenziale. 
+Questo metodo prevede che ad ogni iterazione venga selezionato l'albero che minimizza la funzione di perdita complessiva.
+ La funzione di perdita di CatBoost, chiamata CatBoost Loss Function, si basa su tecniche come l'Ordered Permutation e il Pairwise Comparison.
+Una caratteristica distintiva di CatBoost è l'utilizzo di una tecnica di Pruning Regolarizzato per controllare la crescita degli alberi. 
+Questo permette di evitare l'overfitting, migliorando la generalizzazione del modello. Inoltre, a differenza di altri algoritmi che utilizzano una soglia fissa per fermare la crescita degli alberi, 
+CatBoost combina il guadagno di informazione con la complessità del modello per ottimizzare la struttura degli alberi.
+CatBoost impiega un algoritmo di ricerca degli alberi più sofisticato, che si basa su tecniche come Column-wise Sampling e Greedy Feature Selection. 
+Questo approccio consente di selezionare le caratteristiche più rilevanti e di costruire modelli più efficienti e precisi.
+
  
 -Ensembling Weight Optimization, Determina il contributo ottimale dei singoli modelli all'interno di 
 un insieme per migliorare le prestazioni predittive complessive. Attraverso aggiustamenti iterativi 
