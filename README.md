@@ -15,7 +15,7 @@ Hyperparameter Tuning: Optuna, a hyperparameter optimization library, optimizes 
 
 Boosting Algorithms: The project utilizes four boosting algorithms: LightGBM, XGBoost, CatBoost, and Ensembling Weight Optimization. Boosting algorithms combine weak learners into a stronger learner, enhancing model performance.
 
-Metric Evaluation: Various metrics are assessed to gauge model performance. The final metric used is Rank Probabilities.
+Metric Evaluation: Various metrics are assessed to gauge model performance. The final metric used is Rank Probabilities which maximizes the percentage of Predicted "yes" out of the total "yes". This manual metric is similar to the recall since it maximize the TP without considering the FP but focus on a given percentile.
 
 Interpretable Machine Learning: Shapley Values are employed to understand the significance of individual variables in the model's predictions. This helps identify factors that influence churn risk.
 
