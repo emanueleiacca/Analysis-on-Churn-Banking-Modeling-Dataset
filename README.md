@@ -7,24 +7,19 @@ This project explores building a model to predict customer churn, allowing a bus
 
 ## Methodology
 
-Preprocessing: Data cleaning techniques are applied to address errors. Categorical variables are encoded for model compatibility.
-
-Sampling: Cost-sensitive sampling helps balance the class distribution, ensuring the model prioritizes identifying churned customers.
-
-Hyperparameter Tuning: Optuna, a hyperparameter optimization library, optimizes the parameters used by the boosting algorithms, leading to a more effective model.
-
-Boosting Algorithms: The project utilizes four boosting algorithms: LightGBM, XGBoost, CatBoost, and Ensembling Weight Optimization. Boosting algorithms combine weak learners into a stronger learner, enhancing model performance.
-
-Metric Evaluation: Various metrics are assessed to gauge model performance. The final metric used is Rank Probabilities.
-
-Interpretable Machine Learning: Shapley Values are employed to understand the significance of individual variables in the model's predictions. This helps identify factors that influence churn risk.
+- Preprocessing: Data cleaning techniques are applied to address errors. Categorical variables are encoded for model compatibility.
+- Sampling: Cost-sensitive sampling helps balance the class distribution, ensuring the model prioritizes identifying churned customers.
+- Hyperparameter Tuning: Optuna, a hyperparameter optimization library, optimizes the parameters used by the boosting algorithms, leading to a more effective model.
+- Boosting Algorithms: The project utilizes four boosting algorithms: LightGBM, XGBoost, CatBoost, and Ensembling Weight Optimization. Boosting algorithms combine weak learners into a stronger learner, enhancing model performance.
+- Metric Evaluation: Various metrics are assessed to gauge model performance. The final metric used is Rank Probabilities which maximizes the percentage of Predicted "yes" out of the total "yes". This manual metric is similar to the recall since it maximize the TP without considering the FP but focus on a given percentile.
+- Interpretable Machine Learning: Shapley Values are employed to understand the significance of individual variables in the model's predictions. This helps identify factors that influence churn risk.
 
 ## Results
 
-The model achieved the best results using Rank Probabilities, effectively identifying the most at-risk customers.
-Applying a logarithmic transformation to the data did not improve model performance.
-Incorporating a synthetic dataset alongside the real data contributed to test the model on new unseen data to see if it can generate.
-Shapley Values provided insights into the variables with the most significant impact on churn predictions.
+- The model achieved the best results using Rank Probabilities, effectively identifying the most at-risk customers.
+- Applying a logarithmic transformation to the data did not improve model performance.
+- Incorporating a synthetic dataset alongside the real data contributed to test the model on new unseen data to see if it can generate.
+- Shapley Values provided insights into the variables with the most significant impact on churn predictions.
 Conclusion
 
 This project successfully developed a model capable of accurately predicting customer churn. By leveraging interpretable machine learning techniques, the project gained valuable understanding of the factors influencing the model's decisions.
