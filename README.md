@@ -21,10 +21,10 @@ Interpretable Machine Learning: Shapley Values are employed to understand the si
 
 ## Results
 
-The model achieved the best results using Rank Probabilities, effectively identifying the most at-risk customers.
-Applying a logarithmic transformation to the data did not improve model performance.
-Incorporating a synthetic dataset alongside the real data contributed to test the model on new unseen data to see if it can generate.
-Shapley Values provided insights into the variables with the most significant impact on churn predictions.
+- The model achieved the best results using Rank Probabilities, effectively identifying the most at-risk customers.
+- Applying a logarithmic transformation to the data did not improve model performance.
+- Incorporating a synthetic dataset alongside the real data contributed to test the model on new unseen data to see if it can generate.
+- Shapley Values provided insights into the variables with the most significant impact on churn predictions.
 Conclusion
 
 This project successfully developed a model capable of accurately predicting customer churn. By leveraging interpretable machine learning techniques, the project gained valuable understanding of the factors influencing the model's decisions.
