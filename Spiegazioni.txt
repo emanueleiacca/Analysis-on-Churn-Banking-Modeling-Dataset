@@ -50,9 +50,11 @@ Boosting combina più algoritmi deboli come un albero decisionale per formarne u
 seguito i metodi Boosting utilizzati:
 
 -LightGBM, progettato da Google per grandi Dataset con molte variabili.
-E' un Leaf-wise tree growth, ciò significa che l'albero cresce verticalmente una foglia alla volta,
-per selezionare quella foglia riduciamo la funzione loss al minimo e la espandiamo finché il nostro 
-albero non cattura qualsiasi modello e relazione nei dati, portando a una modello potente.
+LightGBM utilizza una crescita dei rami basata sulle foglie (leaf-wise) anziché sulla profondità (depth-wise).
+Piuttosto che espandere l'albero per tutti i nodi con la stessa profondità, si selezionano solo alcune foglie con 
+funzione di perdita maggiore.
+Questo metodo seleziona la foglia con la maggior riduzione di perdita per l'espansione, il che porta a una 
+crescita più rapida e una migliore accuratezza.
 
 -XGBoost, progettato da un ricercatore cinese, funziona in modo simile ma utilizza i metodi Lasso 
 e/o Ridge come penalità per prevenire l'overfitting e Tree Pruning per fermare la crescita 
@@ -61,14 +63,18 @@ ridurre la funzione loss(quindi quando è sotto una certa soglia): questo permet
 un albero più efficiente e meno complesso.
 
 - Catboost:
-CatBoost è un algoritmo di machine learning sviluppato da Yandex che si basa su un approccio iterativo per costruire un insieme di alberi decisionali deboli in modo sequenziale. 
-Questo metodo prevede che ad ogni iterazione venga selezionato l'albero che minimizza la funzione di perdita complessiva.
- La funzione di perdita di CatBoost, chiamata CatBoost Loss Function, si basa su tecniche come l'Ordered Permutation e il Pairwise Comparison.
-Una caratteristica distintiva di CatBoost è l'utilizzo di una tecnica di Pruning Regolarizzato per controllare la crescita degli alberi. 
-Questo permette di evitare l'overfitting, migliorando la generalizzazione del modello. Inoltre, a differenza di altri algoritmi che utilizzano una soglia fissa per fermare la crescita degli alberi, 
-CatBoost combina il guadagno di informazione con la complessità del modello per ottimizzare la struttura degli alberi.
-CatBoost impiega un algoritmo di ricerca degli alberi più sofisticato, che si basa su tecniche come Column-wise Sampling e Greedy Feature Selection. 
-Questo approccio consente di selezionare le caratteristiche più rilevanti e di costruire modelli più efficienti e precisi.
+CatBoost è un algoritmo di machine learning sviluppato da Yandex che si basa su un approccio 
+iterativo per costruire un insieme di alberi decisionali deboli in modo sequenziale. 
+Questo metodo prevede che ad ogni iterazione venga selezionato l'albero che minimizza la funzione di perdita 
+complessiva. La funzione di perdita di CatBoost, chiamata CatBoost Loss Function, si basa su tecniche 
+come l'Ordered Permutation e il Pairwise Comparison.
+Una caratteristica distintiva di CatBoost è l'utilizzo di una tecnica di Pruning Regolarizzato per controllare 
+la crescita degli alberi. Questo permette di evitare l'overfitting, migliorando la generalizzazione del modello. 
+Inoltre, a differenza di altri algoritmi che utilizzano una soglia fissa per fermare la crescita degli alberi, 
+CatBoost combina il guadagno di informazione con la complessità del modello per ottimizzare la struttura degli 
+alberi. CatBoost impiega un algoritmo di ricerca degli alberi più sofisticato, che si basa su tecniche come 
+Column-wise Sampling e Greedy Feature Selection. Questo approccio consente di selezionare le caratteristiche 
+più rilevanti e di costruire modelli più efficienti e precisi.
 
  
 -Ensembling Weight Optimization, Determina il contributo ottimale dei singoli modelli all'interno di 

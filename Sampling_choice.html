@@ -9585,10 +9585,10 @@ Test set size 75474
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">scale_pos_weight</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span> <span class="c1"># sbilanciamento tra le classi</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span>
-    <span class="n">objective</span><span class="o">=</span><span class="s1">'binary:logistic'</span><span class="p">,</span> 
-    <span class="n">scale_pos_weight</span><span class="o">=</span><span class="n">scale_pos_weight</span><span class="p">,</span> 
-    <span class="n">use_label_encoder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
-    <span class="n">eval_metric</span><span class="o">=</span><span class="s1">'logloss'</span>
+    <span class="n">objective</span><span class="o">=</span><span class="s1">'binary:logistic'</span><span class="p">,</span>        <span class="c1"># Set the learning objective to binary classification with logistic regression</span>
+    <span class="n">scale_pos_weight</span><span class="o">=</span><span class="n">scale_pos_weight</span><span class="p">,</span>  <span class="c1"># Adjust the balance of positive and negative weights</span>
+    <span class="n">use_label_encoder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>            <span class="c1"># Disable the use of label encoder to avoid warning messages</span>
+    <span class="n">eval_metric</span><span class="o">=</span><span class="s1">'logloss'</span>               <span class="c1"># Set the evaluation metric to log loss</span>
 <span class="p">)</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_res</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
